@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dhuudo Exam Results - Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+  <section class="admin-card">
+    <h1>Dhuudo Exam Results</h1>
+    <p class="subtitle">Admin Dashboard</p>
+
+    <div class="notice">
+      This is a front-end prototype. Uploaded data is stored only in this browser.
+      For a real public website, connect the dashboard to a secure database.
+    </div>
+
+    <label for="excelFile">Upload Excel file</label>
+    <input id="excelFile" type="file" accept=".xlsx,.xls,.csv">
+
+    <div class="template">
+      <strong>Excel columns:</strong>
+      Student ID, Student Name, Exam, Biology, Chemistry, Mathematics, English
+    </div>
+
+    <button id="clearBtn" class="danger">Clear local results</button>
+    <a class="back" href="index.html">← Student Portal</a>
+
+    <h2>Current Results</h2>
+    <div id="adminTable"></div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

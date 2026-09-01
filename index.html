@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dhuudo Exam Results</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <section class="portal-card">
+      <div class="school-logo">
+        <img src="school-logo.jpeg" alt="Dhudo Primary and Secondary School logo">
+      </div>
+
+      <h1>Dhuudo Exam Results</h1>
+
+      <div class="result-box">
+        <div class="box-title">
+          <span>Exam Result</span>
+          <span class="dots">⋮</span>
+        </div>
+
+        <form id="resultForm">
+          <label for="studentId">Please Enter Your Roll Number</label>
+          <input id="studentId" name="studentId" type="text"
+                 placeholder="Enter your roll number" autocomplete="username" required>
+
+          <label for="exam">Please Choose Exam</label>
+          <select id="exam" name="exam">
+            <option value="Final">Final</option>
+            <option value="Monthly 2">Monthly 2</option>
+            <option value="Midterm">Midterm</option>
+            <option value="Monthly 1">Monthly 1</option>
+          </select>
+
+          <button type="submit">Show Result</button>
+          <p id="message" class="message"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="resultSection" class="result-card hidden">
+      <div class="result-header">
+        <h2>Student Examination Result</h2>
+        <button id="printBtn" class="print-btn">Print Result</button>
+      </div>
+      <div id="studentInfo" class="student-info"></div>
+      <table>
+        <thead><tr><th>Subject</th><th>Marks</th><th>Grade</th></tr></thead>
+        <tbody id="subjects"></tbody>
+      </table>
+      <div id="summary" class="summary"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

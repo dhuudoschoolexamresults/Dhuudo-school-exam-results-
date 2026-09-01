@@ -1,0 +1,57 @@
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#e7ebef;color:#333}
+.page{width:min(760px,94%);margin:35px auto 70px}
+.portal-card{background:#eef1f4;border-radius:8px;padding:28px 28px 55px}
+.logo-placeholder{height:110px;background:white;border:2px solid #2c65c8;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#2c65c8;font-weight:700;letter-spacing:.5px}
+.logo-placeholder small{margin-top:8px;color:#777;font-weight:400;letter-spacing:0}
+h1{font-weight:400;font-size:30px;margin:18px 0 34px}
+.result-box,.result-card,.admin-card{background:#fff;box-shadow:0 2px 5px #0002}
+.box-title{height:80px;background:#3498d1;color:#fff;font-size:30px;font-weight:700;padding:0 35px;display:flex;align-items:center;justify-content:space-between}
+.dots{font-size:35px}
+form{padding:34px 40px 36px}
+label{display:block;font-size:20px;margin:0 0 10px}
+input,select{width:100%;height:58px;border:1px solid #cfcfcf;border-radius:4px;padding:0 18px;font-size:18px;margin-bottom:27px;background:#fff}
+button{width:100%;height:58px;border:0;border-radius:4px;background:#3498d1;color:#fff;font-size:20px;cursor:pointer}
+button:hover{filter:brightness(.96)}
+.message{text-align:center;min-height:22px;color:#c0392b}
+.hidden{display:none}
+.result-card{margin-top:25px;padding:25px}
+.result-header{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.result-header h2{margin:0;font-size:24px}
+.print-btn{width:auto;padding:0 20px;height:45px;font-size:16px}
+.student-info{background:#f4f7fa;padding:15px;margin:20px 0;line-height:1.8}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ddd;padding:12px;text-align:left}
+th{background:#3498d1;color:#fff}
+.summary{margin-top:20px;padding:18px;background:#f4f7fa;font-size:18px;line-height:1.8}
+.admin-card{padding:30px;border-radius:8px}
+.subtitle{font-size:18px;color:#666;margin-top:-15px}
+.notice{background:#fff8df;border:1px solid #ead27a;padding:14px;margin:20px 0;line-height:1.5}
+.admin-card label{margin-top:20px}
+.admin-card input[type=file]{padding:15px;height:auto}
+.template{padding:14px;background:#f4f7fa;margin:10px 0 20px;overflow:auto}
+.danger{background:#c0392b;width:auto;padding:0 20px}
+.back{display:inline-block;margin:20px 0;color:#1976b9;text-decoration:none}
+.admin-card h2{margin-top:30px}
+.small-table{overflow:auto}
+.small-table table{min-width:700px}
+@media(max-width:600px){
+  .page{width:94%;margin-top:15px}
+  .portal-card{padding:18px 12px 35px}
+  .logo-placeholder{height:90px}
+  h1{font-size:25px;margin:15px 0 25px}
+  .box-title{height:65px;font-size:24px;padding:0 20px}
+  form{padding:25px 22px}
+  label{font-size:18px}
+  input,select{height:54px}
+  .result-header{align-items:flex-start;flex-direction:column}
+  .print-btn{width:100%}
+}
+@media print{
+  body{background:#fff}
+  .portal-card{display:none}
+  .result-card{box-shadow:none;margin:0}
+  .print-btn{display:none}
+}
+.school-logo{height:110px;background:#fff;border:2px solid #2c65c8;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.school-logo img{width:100%;height:100%;object-fit:contain;display:block}

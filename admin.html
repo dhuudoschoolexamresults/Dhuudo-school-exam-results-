@@ -3,33 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dhuudo Exam Results - Admin</title>
+  <title>Dhuudo Exam Results - Admin Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main class="page">
   <section class="admin-card">
-    <h1>Dhuudo Exam Results</h1>
-    <p class="subtitle">Admin Dashboard</p>
+    <div class="admin-top">
+      <div>
+        <h1>Dhuudo Exam Results</h1>
+        <p class="subtitle">Admin Dashboard</p>
+      </div>
+      <a class="back" href="index.html">Student Portal</a>
+    </div>
 
     <div class="notice">
-      This is a front-end prototype. Uploaded data is stored only in this browser.
-      For a real public website, connect the dashboard to a secure database.
+      <strong>Prototype mode:</strong> this dashboard currently saves data in this browser only.
+      It is useful for testing the dashboard. For the real public school system, the next step is
+      connecting it to a secure online database and admin authentication.
     </div>
 
-    <label for="excelFile">Upload Excel file</label>
-    <input id="excelFile" type="file" accept=".xlsx,.xls,.csv">
-
-    <div class="template">
-      <strong>Excel columns:</strong>
-      Student ID, Student Name, Exam, Biology, Chemistry, Mathematics, English
+    <div class="stats">
+      <div class="stat"><span>Total Students</span><strong id="totalStudents">0</strong></div>
+      <div class="stat"><span>Total Results</span><strong id="totalResults">0</strong></div>
+      <div class="stat"><span>Final Results</span><strong id="finalResults">0</strong></div>
+      <div class="stat"><span>Other Exams</span><strong id="otherResults">0</strong></div>
     </div>
 
-    <button id="clearBtn" class="danger">Clear local results</button>
-    <a class="back" href="index.html">← Student Portal</a>
+    <div class="admin-actions">
+      <div class="panel">
+        <h2>➕ Add Result</h2>
+        <form id="addForm" class="admin-form">
+          <div class="grid2">
+            <div><label>Roll Number</label><input id="newId" required placeholder="e.g. DH-2026-001"></div>
+            <div><label>Student Name</label><input id="newName" required placeholder="Student name"></div>
+            <div><label>Exam</label>
+              <select id="newExam">
+                <option>Final</option><option>Monthly 2</option><option>Midterm</option><option>Monthly 1</option>
+              </select>
+            </div>
+            <div><label>Biology</label><input id="newBiology" type="number" min="0" max="100" value="0"></div>
+            <div><label>Chemistry</label><input id="newChemistry" type="number" min="0" max="100" value="0"></div>
+            <div><label>Mathematics</label><input id="newMathematics" type="number" min="0" max="100" value="0"></div>
+            <div><label>English</label><input id="newEnglish" type="number" min="0" max="100" value="0"></div>
+          </div>
+          <button type="submit">Save Result</button>
+        </form>
+      </div>
 
-    <h2>Current Results</h2>
-    <div id="adminTable"></div>
+      <div class="panel">
+        <h2>📥 Import Many Students</h2>
+        <p>Upload an Excel/CSV file. Required columns:</p>
+        <div class="template">Student ID, Student Name, Exam, Biology, Chemistry, Mathematics, English</div>
+        <input id="excelFile" type="file" accept=".xlsx,.xls,.csv">
+        <p id="uploadMessage" class="message"></p>
+        <button id="downloadTemplate" type="button" class="secondary">Download CSV Template</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="table-head">
+        <h2>📋 Results</h2>
+        <input id="searchBox" class="search" placeholder="Search roll number or student name">
+      </div>
+      <div id="adminTable"></div>
+    </div>
+
+    <button id="clearBtn" class="danger">Delete All Local Results</button>
   </section>
 </main>
 

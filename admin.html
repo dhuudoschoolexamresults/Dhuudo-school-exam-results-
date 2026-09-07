@@ -42,9 +42,16 @@
                 <option>Final</option><option>Monthly 2</option><option>Midterm</option><option>Monthly 1</option>
               </select>
             </div>
+            <div><label>Islamic</label><input id="newIslamic" type="number" min="0" max="100" value="0"></div>
+            <div><label>Arabic</label><input id="newArabic" type="number" min="0" max="100" value="0"></div>
             <div><label>Biology</label><input id="newBiology" type="number" min="0" max="100" value="0"></div>
             <div><label>Chemistry</label><input id="newChemistry" type="number" min="0" max="100" value="0"></div>
+            <div><label>Physics</label><input id="newPhysics" type="number" min="0" max="100" value="0"></div>
             <div><label>Mathematics</label><input id="newMathematics" type="number" min="0" max="100" value="0"></div>
+            <div><label>Business</label><input id="newBusiness" type="number" min="0" max="100" value="0"></div>
+            <div><label>Geography</label><input id="newGeography" type="number" min="0" max="100" value="0"></div>
+            <div><label>History</label><input id="newHistory" type="number" min="0" max="100" value="0"></div>
+            <div><label>Af-Somali</label><input id="newAfsomali" type="number" min="0" max="100" value="0"></div>
             <div><label>English</label><input id="newEnglish" type="number" min="0" max="100" value="0"></div>
           </div>
           <button type="submit">Save Result</button>
@@ -54,7 +61,7 @@
       <div class="panel">
         <h2>📥 Import Many Students</h2>
         <p>Upload an Excel/CSV file. Required columns:</p>
-        <div class="template">Student ID, Student Name, Exam, Biology, Chemistry, Mathematics, English</div>
+        <div class="template">Student ID, Student Name, Exam, Islamic, Arabic, Biology, Chemistry, Physics, Mathematics, Business, Geography, History, Af-Somali, English</div>
         <input id="excelFile" type="file" accept=".xlsx,.xls,.csv">
         <p id="uploadMessage" class="message"></p>
         <button id="downloadTemplate" type="button" class="secondary">Download CSV Template</button>

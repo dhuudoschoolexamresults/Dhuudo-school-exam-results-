@@ -12,6 +12,28 @@ function esc(v){
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
   }[c]));
 }
+function subjectsOf(r){
+  return r.subjects || {};
+}
+const SUBJECTS = [
+  "Islamic", "Arabic", "Biology", "Chemistry", "Physics",
+  "Mathematics", "Business", "Geography", "History", "Af-Somali", "English"
+];
+function totalAndAverage(r){
+  const marks = SUBJECTS.map(s => Number(subjectsOf(r)[s] ?? 0));
+  const total = marks.reduce((a,b)=>a+b,0);
+  return { total, average: total / SUBJECTS.length };
+}
+function isPass(r){
+  return totalAndAverage(r).average >= 50;
+}
+function getPosition(r, data){
+  const sameExam = data.filter(x => x.exam === r.exam);
+  const ranked = sameExam.map(x => ({id:String(x.id), average:totalAndAverage(x).average}))
+    .sort((a,b)=>b.average-a.average);
+  const pos = ranked.findIndex(x => x.id.toLowerCase() === String(r.id).toLowerCase());
+  return pos < 0 ? "-" : pos + 1;
+}
 function render(){
   const data = getResults();
   const q = (document.getElementById("searchBox")?.value || "").trim().toLowerCase();
@@ -34,15 +56,14 @@ function render(){
 
   el.innerHTML = `<div class="small-table"><table>
     <thead><tr>
-      <th>Roll Number</th><th>Name</th><th>Exam</th>
-      <th>Biology</th><th>Chemistry</th><th>Mathematics</th><th>English</th><th>Action</th>
+      <th>Roll Number</th><th>Name</th><th>Exam</th><th>Total</th><th>Average</th><th>Pass/Fail</th><th>Position</th><th>Action</th>
     </tr></thead><tbody>
-    ${filtered.map((r, i) => {
+    ${filtered.map((r) => {
       const originalIndex = data.indexOf(r);
+      const {total, average} = totalAndAverage(r);
       return `<tr>
         <td>${esc(r.id)}</td><td>${esc(r.name)}</td><td>${esc(r.exam)}</td>
-        <td>${r.subjects?.Biology ?? ""}</td><td>${r.subjects?.Chemistry ?? ""}</td>
-        <td>${r.subjects?.Mathematics ?? ""}</td><td>${r.subjects?.English ?? ""}</td>
+        <td>${total}</td><td>${average.toFixed(2)}%</td><td>${isPass(r) ? "PASS" : "FAIL"}</td><td>${getPosition(r,data)}</td>
         <td><button class="delete-one" data-index="${originalIndex}">Delete</button></td>
       </tr>`;
     }).join("")}
@@ -67,12 +88,7 @@ document.getElementById("addForm").addEventListener("submit", e => {
     id: document.getElementById("newId").value.trim(),
     name: document.getElementById("newName").value.trim(),
     exam: document.getElementById("newExam").value,
-    subjects: {
-      Biology: Number(document.getElementById("newBiology").value || 0),
-      Chemistry: Number(document.getElementById("newChemistry").value || 0),
-      Mathematics: Number(document.getElementById("newMathematics").value || 0),
-      English: Number(document.getElementById("newEnglish").value || 0)
-    }
+    subjects: Object.fromEntries(SUBJECTS.map(s => [s, Number(document.getElementById("new" + s.replace(/[^A-Za-z]/g, "")).value || 0)]))
   };
   if(!result.id || !result.name) return;
 
@@ -85,7 +101,7 @@ document.getElementById("addForm").addEventListener("submit", e => {
   data.push(result);
   saveResults(data);
   e.target.reset();
-  ["newBiology","newChemistry","newMathematics","newEnglish"].forEach(id => document.getElementById(id).value = 0);
+  SUBJECTS.forEach(s => { const el = document.getElementById("new" + s.replace(/[^A-Za-z]/g, "")); if(el) el.value = 0; });
   render();
   alert("Result saved successfully.");
 });
@@ -103,12 +119,7 @@ document.getElementById("excelFile").addEventListener("change", async e => {
       id: String(r["Student ID"] || r["Roll Number"] || "").trim(),
       name: String(r["Student Name"] || r["Name"] || "").trim(),
       exam: String(r["Exam"] || "Final").trim(),
-      subjects: {
-        Biology: Number(r["Biology"] || 0),
-        Chemistry: Number(r["Chemistry"] || 0),
-        Mathematics: Number(r["Mathematics"] || r["Maths"] || 0),
-        English: Number(r["English"] || 0)
-      }
+      subjects: Object.fromEntries(SUBJECTS.map(s => [s, Number(r[s] || 0)]))
     })).filter(r => r.id && r.name);
 
     const existing = getResults();
@@ -132,7 +143,7 @@ document.getElementById("clearBtn").addEventListener("click", () => {
 });
 
 document.getElementById("downloadTemplate").addEventListener("click", () => {
-  const csv = "Student ID,Student Name,Exam,Biology,Chemistry,Mathematics,English\nDH-2026-001,Ahmed Ali,Final,85,78,80,75\n";
+  const csv = "Student ID,Student Name,Exam,Islamic,Arabic,Biology,Chemistry,Physics,Mathematics,Business,Geography,History,Af-Somali,English\nDH-2026-001,Ahmed Ali,Final,85,78,80,75,82,88,79,81,77,84,90\n";
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);

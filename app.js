@@ -97,8 +97,10 @@ document
       document.getElementById("studentId").value
     );
 
-    const exam = clean(
-      document.getElementById("exam").value
+    const exam = document
+  .getElementById("exam")
+  .value
+  .String(x["Exam"] ?? "").trim().toLowerCase() === exam
     );
 
     const message =

@@ -3,8 +3,7 @@ const SUPABASE_URL = "https://emoutbhwhdoggnrhuibt.supabase.co";
 // KU 
 const SUPABASE_KEY = "sb_publishable_dkQz6bZztVJu5VQMe-l-WQ_7NAXlNzp";
 
-const TABLE = "Result";
-
+const TABLE = "Results";
 const SUBJECTS = [
   "Islamic",
   "Arabic",

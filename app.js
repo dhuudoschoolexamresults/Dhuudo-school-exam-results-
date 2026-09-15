@@ -113,10 +113,12 @@ document
 
       const allResults = await getResults();
 
-      const result = allResults.find(x =>
-        clean(x["ID"]) === id &&
-        clean(x["Exam"]) === exam
-      );
+const result = allResults.find(x => {
+  const dbId = String(x["ID"] ?? "").trim();
+  const dbExam = String(x["Exam"] ?? "").trim().toLowerCase();
+
+  return dbId === id && dbExam === exam;
+});
 
       if (!result) {
 

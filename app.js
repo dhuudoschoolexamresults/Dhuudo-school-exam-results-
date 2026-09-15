@@ -1,9 +1,10 @@
 const SUPABASE_URL = "https://emoutbhwhdoggnrhuibt.supabase.co";
 
-// KU 
+// KU
 const SUPABASE_KEY = "sb_publishable_dkQz6bZztVJu5VQMe-l-WQ_7NAXlNzp";
 
 const TABLE = "Results";
+
 const SUBJECTS = [
   "Islamic",
   "Arabic",
@@ -72,7 +73,7 @@ function positionOf(result, data) {
       clean(x["Exam"]) === clean(result["Exam"])
     )
     .map(x => ({
-      id: clean(x["ID"]),
+      id: clean(x["id"]),
       average: Number(
         x["Average"] ?? totalAndAverage(x).average
       )
@@ -80,7 +81,7 @@ function positionOf(result, data) {
     .sort((a, b) => b.average - a.average);
 
   const position = sameExam.findIndex(
-    x => x.id === clean(result["ID"])
+    x => x.id === clean(result["id"])
   );
 
   return position < 0 ? "-" : position + 1;
@@ -97,8 +98,8 @@ document
     );
 
     const exam = clean(
-  document.getElementById("exam").value
-);
+      document.getElementById("exam").value
+    );
 
     const message =
       document.getElementById("message");
@@ -113,12 +114,10 @@ document
 
       const allResults = await getResults();
 
-const result = allResults.find(x => {
-  const dbId = String(x["ID"] ?? "").trim();
-  const dbExam = String(x["Exam"] ?? "").trim().toLowerCase();
-
-  return dbId === id && dbExam === exam;
-});
+      const result = allResults.find(x =>
+        clean(x["id"]) === id &&
+        clean(x["Exam"]) === exam
+      );
 
       if (!result) {
 
@@ -176,7 +175,7 @@ const result = allResults.find(x => {
         ${result["Student Name"] ?? ""}<br>
 
         <strong>Roll Number:</strong>
-        ${result["ID"] ?? ""}<br>
+        ${result["id"] ?? ""}<br>
 
         <strong>Exam:</strong>
         ${result["Exam"] ?? ""}

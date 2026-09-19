@@ -1,5 +1,5 @@
 const SUPABASE_URL = "https://emoutbhwhdoggnrhuibt.supabase.co";
-const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
+const SUPABASE_KEY = "sb_publishable_dkQz6bZztVJu5VQMe-l-WQ_7NAXlNzp";
 const SUBJECTS = [
   "Islamic",
   "Arabic",

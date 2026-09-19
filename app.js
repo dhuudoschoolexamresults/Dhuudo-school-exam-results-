@@ -1,10 +1,5 @@
 const SUPABASE_URL = "https://emoutbhwhdoggnrhuibt.supabase.co";
-
-// KU
-const SUPABASE_KEY = "sb_publishable_dkQz6bZztVJu5VQMe-l-WQ_7NAXlNzp";
-
-const TABLE = "Results";
-
+const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
 const SUBJECTS = [
   "Islamic",
   "Arabic",
@@ -15,211 +10,78 @@ const SUBJECTS = [
   "Business",
   "Geography",
   "History",
-  "Af-Somali",
+  "Af-somali",
   "English"
 ];
-
-function clean(value) {
-  return String(value ?? "")
-    .trim()
-    .toLowerCase();
-}
-
-async function getResults() {
-  const url = `${SUPABASE_URL}/rest/v1/${TABLE}?select=*`;
-
-  const response = await fetch(url, {
-    headers: {
-      apikey: SUPABASE_KEY,
-      Authorization: `Bearer ${SUPABASE_KEY}`
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error("Could not load results");
+const rollNumberInput = document.getElementById("rollNumber");
+const examSelect = document.getElementById("exam");
+const resultContainer = document.getElementById("result");
+const showResultButton = document.getElementById("showResult");
+showResultButton.addEventListener("click", getResult);
+async function getResult() {
+  const rollNumber = rollNumberInput.value.trim();
+  const exam = examSelect.value;
+  if (!rollNumber || !exam) {
+    resultContainer.innerHTML =
+      "<p>Please enter your roll number and choose exam.</p>";
+    return;
   }
-
-  return await response.json();
-}
-
-function grade(mark) {
-  if (mark >= 90) return "A+";
-  if (mark >= 80) return "A";
-  if (mark >= 75) return "B+";
-  if (mark >= 70) return "B";
-  if (mark >= 65) return "C+";
-  if (mark >= 60) return "C";
-  if (mark >= 50) return "D";
-  return "F";
-}
-
-function totalAndAverage(result) {
-  const marks = SUBJECTS.map(subject =>
-    Number(result[subject] ?? 0)
-  );
-
-  const total = marks.reduce((a, b) => a + b, 0);
-  const average = total / SUBJECTS.length;
-
-  return {
-    total,
-    average
-  };
-}
-
-function positionOf(result, data) {
-  const sameExam = data
-    .filter(x =>
-      clean(x["Exam"]) === clean(result["Exam"])
-    )
-    .map(x => ({
-      id: clean(x["id"]),
-      average: Number(
-        x["Average"] ?? totalAndAverage(x).average
-      )
-    }))
-    .sort((a, b) => b.average - a.average);
-
-  const position = sameExam.findIndex(
-    x => x.id === clean(result["id"])
-  );
-
-  return position < 0 ? "-" : position + 1;
-}
-
-document
-  .getElementById("resultForm")
-  .addEventListener("submit", async function (e) {
-
-    e.preventDefault();
-
-    const id = clean(
-      document.getElementById("studentId").value
-    );
-
-    const exam = clean(
-      document.getElementById("exam").value
-    );
-
-    const message =
-      document.getElementById("message");
-
-    message.textContent = "Loading...";
-
-    document
-      .getElementById("resultSection")
-      .classList.add("hidden");
-
-    try {
-
-      const allResults = await getResults();
-
-      const result = allResults.find(x =>
-        clean(x["id"]) === id &&
-        clean(x["Exam"]) === exam
-      );
-
-      if (!result) {
-
-        message.textContent =
-          "Result not found. Please check your Roll Number and Exam.";
-
-        return;
+  resultContainer.innerHTML = "<p>Loading...</p>";
+  try {
+    const url =
+      `${SUPABASE_URL}/rest/v1/Results` +
+      `?select=*` +
+      `&id=eq.${encodeURIComponent(rollNumber)}` +
+      `&exam=eq.${encodeURIComponent(exam)}`;
+    const response = await fetch(url, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`
       }
-
-      message.textContent = "";
-
-      const rows = SUBJECTS.map(subject => [
-        subject,
-        Number(result[subject] ?? 0)
-      ]);
-
-      const calculated =
-        totalAndAverage(result);
-
-      document.getElementById("subjects").innerHTML =
-        rows
-          .map(([subject, mark]) => `
-            <tr>
-              <td>${subject}</td>
-              <td>${mark}</td>
-              <td>${grade(mark)}</td>
-            </tr>
-          `)
-          .join("");
-
-      const total =
-        result["Total"] !== null &&
-        result["Total"] !== undefined &&
-        result["Total"] !== ""
-          ? Number(result["Total"])
-          : calculated.total;
-
-      const average =
-        result["Average"] !== null &&
-        result["Average"] !== undefined &&
-        result["Average"] !== ""
-          ? Number(result["Average"])
-          : calculated.average;
-
-      const passFail =
-        result["Pass/Fail"] ||
-        (average >= 50 ? "PASS" : "FAIL");
-
-      const position =
-        result["Position"] ||
-        positionOf(result, allResults);
-
-      document.getElementById("studentInfo").innerHTML = `
-        <strong>Name:</strong>
-        ${result["Student Name"] ?? ""}<br>
-
-        <strong>Roll Number:</strong>
-        ${result["id"] ?? ""}<br>
-
-        <strong>Exam:</strong>
-        ${result["Exam"] ?? ""}
-      `;
-
-      document.getElementById("summary").innerHTML = `
-        <strong>Total:</strong> ${total} / 1100
-        &nbsp; | &nbsp;
-
-        <strong>Average:</strong>
-        ${average.toFixed(2)}%
-
-        &nbsp; | &nbsp;
-
-        <strong>Result:</strong>
-        ${passFail}
-
-        &nbsp; | &nbsp;
-
-        <strong>Position:</strong>
-        ${position}
-      `;
-
-      document
-        .getElementById("resultSection")
-        .classList.remove("hidden");
-
-      document
-        .getElementById("resultSection")
-        .scrollIntoView({
-          behavior: "smooth"
-        });
-
-    } catch (error) {
-
-      console.error(error);
-
-      message.textContent =
-        "Unable to connect to the results database. Please try again.";
+    });
+    if (!response.ok) {
+      throw new Error(`Supabase error: ${response.status}`);
     }
-  });
-
-document
-  .getElementById("printBtn")
-  .addEventListener("click", () => {
-    window.print();
-  });
+    const data = await response.json();
+    if (!data || data.length === 0) {
+      resultContainer.innerHTML =
+        "<p>Result not found. Check your roll number and exam.</p>";
+      return;
+    }
+    const result = data[0];
+    let total = 0;
+    let count = 0;
+    SUBJECTS.forEach(subject => {
+      const mark = Number(result[subject]);
+      if (!isNaN(mark)) {
+        total += mark;
+        count++;
+      }
+    });
+    const average = count > 0 ? (total / count).toFixed(2) : "0";
+    resultContainer.innerHTML = `
+      <div class="result-card">
+        <h2>Exam Result</h2>
+        <p><strong>Roll Number:</strong> ${result.id ?? ""}</p>
+        <p><strong>Name:</strong> ${result["student name"] ?? ""}</p>
+        <p><strong>Class:</strong> ${result.class ?? ""}</p>
+        <p><strong>Exam:</strong> ${result.exam ?? ""}</p>
+        <hr>
+        <h3>Subjects</h3>
+        ${SUBJECTS.map(subject => `
+          <p>
+            <strong>${subject}:</strong>
+            ${result[subject] ?? "-"}
+          </p>
+        `).join("")}
+        <hr>
+        <p><strong>Total:</strong> ${total}</p>
+        <p><strong>Average:</strong> ${average}</p>
+      </div>
+    `;
+  } catch (error) {
+    console.error(error);
+    resultContainer.innerHTML =
+      "<p>Error loading result. Please try again.</p>";
+  }
+}
